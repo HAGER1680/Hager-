@@ -1,22 +1,26 @@
-# Hager-# Imports python modules
+# Imports python modules
 from os import listdir
 
 # TODO 2: Define get_pet_labels function below please be certain to replace None
-#       in the return statement with results_dic dictionary that you create
+#       in the return statement with results_dic dictionary that you create 
 #       with this function
-##
+# 
 def get_pet_labels(image_dir):
     """
-    Creates a dictionary of pet labels based upon the filenames of the image 
-    files. Reads in pet filenames and extracts the pet image labels from the 
-    filenames and returns these label as petlabel_dic. This is used to check 
-    the accuracy of the image classifier model.
+    Creates a dictionary of pet labels (results_dic) based upon the filenames 
+    of the image files. These pet image labels are used to check the accuracy 
+    of the labels that are returned by the classifier function, since the 
+    filenames of the images contain the true identity of the pet in the image.
+    Be sure to format the pet labels so that they are in all lower case letters
+    and with leading and trailing whitespace characters stripped from them.
+    (ex. filename = 'Boston_terrier_02259.jpg' Pet label = 'boston terrier')
     Parameters:
      image_dir - The (full) path to the folder of images that are to be
-                 classified by pretrained CNN models (string)
+                 classified by the classifier function (string)
     Returns:
-     petlabels_dic - Dictionary storing image filename (as key) and Pet Image
-                     Labels (as value)  
+      results_dic - Dictionary with 'key' as image filename and 'value' as a 
+      List. The list contains for following item:
+         index 0 = pet image label (string)
     """
     # Creates list of files in directory
     in_files = listdir(image_dir)
@@ -24,8 +28,8 @@ def get_pet_labels(image_dir):
     # Processes each of the files to create a dictionary where the key
     # is the filename and the value is the picture label (below).
  
-    # Creates empty dictionary for the labels
-    petlabels_dic = dict()
+    # Creates empty dictionary for the results (pet labels, etc.)
+    results_dic = dict()
    
     # Processes through each file in the directory, extracting only the words
     # of the file that contain the pet image label
@@ -37,3 +41,26 @@ def get_pet_labels(image_dir):
            
            # Creates temporary label variable to hold pet label name extracted 
            pet_label = ""
+
+           #          Processes each 
+           #          filename in the in_files list to extract the dog breed 
+           #          name from the filename. 
+           name = in_files[idx].lower().split("_")
+           for each in name:
+                if each.isalpha():
+                     pet_label += each + " "
+           pet_label = pet_label.strip() # returns a copy of the string with both leading and trailing whitespaces removed     
+           
+           # If filename doesn't already exist in dictionary add it and it's
+           # pet label - otherwise print an error message because indicates 
+           # duplicate files (filenames)
+           if in_files[idx] not in results_dic:
+              results_dic[in_files[idx]] = [pet_label]
+              
+           else:
+               print("** Warning: Duplicate files exist in directory:", 
+                     in_files[idx])
+
+    # Replace None with the results_dic dictionary that you created with this
+    # function
+    return results_dic
